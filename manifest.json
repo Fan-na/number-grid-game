@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "数字挑战",
+  "name": "数字顺序挑战游戏",
   "icons": [
     {
       "src": "favicon.ico",

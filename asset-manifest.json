@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/number-grid-game/static/css/main.e6c13ad2.css",
-    "main.js": "/number-grid-game/static/js/main.f4263f64.js",
+    "main.js": "/number-grid-game/static/js/main.5c0a592a.js",
     "static/js/453.5d4db132.chunk.js": "/number-grid-game/static/js/453.5d4db132.chunk.js",
     "index.html": "/number-grid-game/index.html",
     "main.e6c13ad2.css.map": "/number-grid-game/static/css/main.e6c13ad2.css.map",
-    "main.f4263f64.js.map": "/number-grid-game/static/js/main.f4263f64.js.map",
+    "main.5c0a592a.js.map": "/number-grid-game/static/js/main.5c0a592a.js.map",
     "453.5d4db132.chunk.js.map": "/number-grid-game/static/js/453.5d4db132.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.f4263f64.js"
+    "static/js/main.5c0a592a.js"
   ]
 }
