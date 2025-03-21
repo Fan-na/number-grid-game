@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
 
 const NumberGrid = () => {
   const [numbers, setNumbers] = useState([]);
@@ -9,25 +8,64 @@ const NumberGrid = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [clickedNumbers, setClickedNumbers] = useState(new Set());
 
-  // ... 其他函数保持不变 ...
+  // 生成1-25的随机数字网格
+  const generateRandomGrid = () => {
+    const nums = Array.from({ length: 25 }, (_, i) => i + 1);
+    
+    // Fisher-Yates 洗牌算法
+    for (let i = nums.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [nums[i], nums[j]] = [nums[j], nums[i]];
+    }
+    
+    setNumbers(nums);
+    setCurrentNumber(1);
+    setStartTime(null);
+    setEndTime(null);
+    setGameStarted(false);
+    setClickedNumbers(new Set());
+  };
+
+  // 初始化游戏
+  useEffect(() => {
+    generateRandomGrid();
+  }, []);
+
+  // 处理数字点击
+  const handleNumberClick = (number) => {
+    if (!gameStarted) {
+      setGameStarted(true);
+      setStartTime(new Date());
+    }
+    
+    if (number === currentNumber) {
+      // 添加到已点击数字集合
+      const newClickedNumbers = new Set(clickedNumbers);
+      newClickedNumbers.add(number);
+      setClickedNumbers(newClickedNumbers);
+      
+      if (currentNumber === 25) {
+        // 游戏完成
+        setEndTime(new Date());
+      } else {
+        // 前进到下一个数字
+        setCurrentNumber(currentNumber + 1);
+      }
+    }
+  };
+
+  // 计算完成时间
+  const calculateTime = () => {
+    if (startTime && endTime) {
+      const timeDiff = (endTime - startTime) / 1000; // 转换为秒
+      return timeDiff.toFixed(2);
+    }
+    return null;
+  };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center p-4">
+    <div className="flex flex-col items-center p-4 max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-4">数字顺序挑战</h1>
-      
-      {/* 二维码部分 */}
-      <div className="mb-4">
-        <QRCodeSVG 
-          value={window.location.href}
-          size={128}
-          level="L"
-          className="mx-auto"
-        />
-        <p className="text-sm text-gray-600 mt-2 text-center">
-          扫描二维码分享游戏
-        </p>
-      </div>
-
       <div className="mb-4">
         {endTime ? (
           <div className="text-center">
@@ -47,24 +85,20 @@ const NumberGrid = () => {
         )}
       </div>
       
-      {/* 关键修改：使用aspect-square确保宽高比1:1，并限制最大宽度 */}
-      <div className="w-full max-w-[500px] aspect-square">
-        <div className="grid grid-cols-5 gap-1 h-full w-full">
-          {numbers.map((number, index) => (
-            <button
-              key={index}
-              onClick={() => handleNumberClick(number)}
-              className={`
-                aspect-square flex items-center justify-center text-lg md:text-xl font-bold rounded
-                ${clickedNumbers.has(number) ? 'bg-red-500 text-white' : 'bg-gray-100 hover:bg-gray-200'}
-                transition-colors duration-200
-              `}
-              disabled={endTime !== null || clickedNumbers.has(number)}
-            >
-              {number}
-            </button>
-          ))}
-        </div>
+      <div className="grid grid-cols-5 gap-2 w-full">
+        {numbers.map((number, index) => (
+          <button
+            key={index}
+            onClick={() => handleNumberClick(number)}
+            className={`
+              h-16 w-full flex items-center justify-center text-lg font-bold rounded
+              ${clickedNumbers.has(number) ? 'bg-red-500 text-white' : 'bg-gray-100 hover:bg-gray-200'}
+            `}
+            disabled={endTime !== null || clickedNumbers.has(number)}
+          >
+            {number}
+          </button>
+        ))}
       </div>
     </div>
   );
